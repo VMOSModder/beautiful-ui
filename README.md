@@ -6,6 +6,8 @@ Change your interface user of virtual machine with beautiful UI with overlay
 
 Support only Android 7.1
 
+This modification will also patch `ro.vmos.simplest.rom` to `false` to unlock full system interface user
+
 ### Installation
 
 This is modification zip for vmos toolflash
