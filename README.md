@@ -10,6 +10,6 @@ This modification will also patch `ro.vmos.simplest.rom` to `false` to unlock fu
 
 ### Installation
 
-This is modification zip for vmos toolflash
+This is modification zip for VMOS Tools 1.27+
 
 Read [modification.md](https://github.com/HuskyDG/VMOSPro_RootXposed_Terminal/blob/main/modification.md)
