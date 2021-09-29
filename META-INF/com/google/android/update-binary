@@ -1,0 +1,65 @@
+#!/system/bin/sh
+
+####################
+# INSTALL SCRIPT For VMOSTOOL
+####################
+
+# Use this script as:
+# META-INF/com/google/android/update-binary
+# to make it can be flashed in VMOS Pro
+
+# script should be use only on VMOS
+# Don't use it on real system devices
+
+# SOURCE utils from VMOSTools
+. /tool_files/main/exbin/utils
+
+# Set up $ZIPFILE variable
+ZIPFILE=$3; OUTFD=$2
+# VMOS doesn't have its own "/proc" 
+# so $OUTFD variable is unavailable
+######################
+# Config (Before)
+######################
+unzip -o "$ZIPFILE" 'config.sh' -d ./ &>/dev/null
+ . ./config.sh "$ZIPFILE"
+BOOTDIR=/tool_files/work/.boot
+cat <<<"$REMOVE_LIST" | while read file; do echo "$file" >>$BOOTDIR/delete.list; done
+if [ ! "$IGNORE_PLACE" == "true" ]; then
+    echo "- Placing system files..."
+    unzip -o "$ZIPFILE" 'system/*' -d "/proc/self/root/$(getprop ro.huskydg.rootfs)/$BOOTDIR" &>/dev/null
+fi
+# VERSION=2 uses post-fs-data.sh and service.sh in 'common'  folder of new template zip
+if [ "$VERSION" == "2" ]; then
+    unzip -o "$ZIPFILE" 'common/*' -d "./" &>/dev/null
+    if [ "$POSTFSDATA" ]; then
+        echo "- Set up post-fs-data script..."
+        cp ./common/post-fs-data.sh "/tool_files/work/script/post-fs-data.d/$POSTFSDATA"
+    fi
+    if [ "$LATESTART" ]; then
+        echo "- Set up late_start service script..."
+        cp ./common/service.sh "/tool_files/work/script/late_start.d/$LATESTART"
+    fi
+else
+    if [ "$POSTFSDATA" ]; then
+        echo "- Set up post-fs-data script..."
+        unzip -o "$ZIPFILE" '$POSTFSDATA' -d "./" &>/dev/null
+        cp ./"$POSTFSDATA" "/tool_files/work/script/post-fs-data.d/$POSTFSDATA"
+    fi
+    if [ "$LATESTART" ]; then
+        unzip -o "$ZIPFILE" '$LATESTART' -d "./" &>/dev/null
+        echo "- Set up late_start service script..."
+        cp ./"$LATESTART" "/tool_files/work/script/late_start.d/$LATESTART"
+    fi
+fi
+####################
+# Custom Script (After)
+####################
+unzip -o "$ZIPFILE" 'custom.sh' -d "./" &>/dev/null
+if [ -f custom.sh ]; then
+  . ./custom.sh "$ZIPFILE"
+fi
+
+####################
+####################
+echo "- Done!"
