@@ -34,5 +34,14 @@ LATESTART=
 # Use this command to extract your file
 # unzip -o $ZIPFILE "your_file" -d "./"
 
-echo "TEMPLATE MOD"
-echo "by HusyDG"
+if [ "$API" == "25" ]; then
+echo "******************************"
+echo "  Flux UI • VMOS Pro"
+echo "******************************"
+echo "Patch read-only prop: ro.vmos.simplest.rom"
+mod_prop ro.vmos.simplest.rom false
+else
+  IGNORE_PLACE=true
+  echo "! Unsupported version ($API)"
+  exit 1;
+fi
