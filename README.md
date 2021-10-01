@@ -8,6 +8,8 @@ Support only Android 7.1
 
 This modification will also patch `ro.vmos.simplest.rom` to `false` to unlock full system interface user
 
+Thank [proVROM](https://youtu.be/eyn6cXRd79U) for this beautiful Flux UI theme
+
 ### Installation
 
 This is modification zip for VMOS Tools 1.27+
